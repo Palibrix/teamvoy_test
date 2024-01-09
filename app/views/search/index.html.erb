@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <style>
+    .pagination-button{
+        display: none;
+        font-size:25px;
+        width: 150px;
+        height: 50px;
+    }
+  </style>
+<h1>Search Results</h1>
+
+<form action="/search?query=<%= params[:query] %>" method="get">
+  <input type="text" id="searchInput" name="query" placeholder="Enter search query" value="<%= params[:query] %>">
+  <button type="submit" id="searchButton" >Search</button>
+</form>
+
+<% @results.each do |score, items| %>
+  <div style="font-size: 30px">
+    <h3>Results with score <%= score %>:</h3>
+    <p>Found <b><%= items.size %></b> item(s).</p>
+  </div>
+  <% items.each do |item| %>
+    <li style="font-size: 25px; margin: 25px">
+      <div class="hover-area">
+      <span class="language-name"> Language name: <%= item[:entry]["Name"].titleize %></span>
+      <div class="language-details" style="display: none;">
+        Language type(s): <%= item[:entry]["Type"].titleize %>
+        <br>
+        Language creator(s): <%= item[:entry]["Designed by"].titleize %>
+      </div>
+      <hr>
+      </div>
+    </li>
+
+  <% end %>
+<% end %>
+
+<button id="prevBtn" class="pagination-button">Previous</button>
+<button id="nextBtn" class="pagination-button">Next</button>
+
+<script>
+
+    var currentPage = 0;
+    var itemsPerPage = 10;
+    var items = Array.from(document.querySelectorAll('.hover-area'));
+
+    // Executing following func to show all items
+    showPage(currentPage);
+
+    // Showing and hiding buttons, so that there won't be a button "Next", when 0 next items are present or vise versa
+    document.getElementById('prevBtn').addEventListener('click', function() {
+        if (currentPage > 0) {
+            currentPage--;
+            showPage(currentPage);
+        }
+    });
+
+    document.getElementById('nextBtn').addEventListener('click', function() {
+        if (currentPage < Math.ceil(items.length / itemsPerPage) - 1) {
+            currentPage++;
+            showPage(currentPage);
+        }
+    });
+
+    // That's our main guest
+    function showPage(pageNumber) {
+        // Firstly, every item must be hidden
+        items.forEach(function(item) {
+            item.parentNode.style.display = 'none';
+        });
+
+        // Then we calculate the range of items for a "page"
+        var startIndex = pageNumber * itemsPerPage;
+        var endIndex = startIndex + itemsPerPage;
+
+        // Here is a small loop to show every item, if it in range
+        for (var i = startIndex; i < endIndex && i < items.length; i++) {
+            items[i].parentNode.style.display = 'block';
+        }
+
+        // Lastly, we update the visibility of the pagination buttons
+        document.getElementById('prevBtn').style.display = pageNumber > 0 ? 'inline' : 'none';
+        document.getElementById('nextBtn').style.display = endIndex < items.length ? 'inline' : 'none';
+    }
+
+    // Hover-function
+    window.onload = function() {
+        var hoverAreas = document.getElementsByClassName('hover-area');
+
+        for (var i = 0; i < hoverAreas.length; i++) {
+            hoverAreas[i].addEventListener('mouseover', function() {
+                this.querySelector('.language-name').nextElementSibling.style.display = 'block';
+            });
+
+            // If mouse still over description, it must be visible. So if mouse NOT over relatives, description hides
+            hoverAreas[i].addEventListener('mouseout', function(e) {
+                if (!e.relatedTarget || !this.contains(e.relatedTarget)) {
+                    this.querySelector('.language-name').nextElementSibling.style.display = 'none';
+                }
+            });
+        }
+    };
+
+</script>
+
+</body>
+</html>
