@@ -86,22 +86,20 @@
     }
 
     // Hover-function
-    window.onload = function() {
-        var hoverAreas = document.getElementsByClassName('hover-area');
+    var hoverAreas = document.getElementsByClassName('hover-area');
 
-        for (var i = 0; i < hoverAreas.length; i++) {
-            hoverAreas[i].addEventListener('mouseover', function() {
-                this.querySelector('.language-name').nextElementSibling.style.display = 'block';
-            });
+    for (var i = 0; i < hoverAreas.length; i++) {
+        hoverAreas[i].addEventListener('mouseover', function() {
+            this.querySelector('.language-name').nextElementSibling.style.display = 'block';
+        });
 
-            // If mouse still over description, it must be visible. So if mouse NOT over relatives, description hides
-            hoverAreas[i].addEventListener('mouseout', function(e) {
-                if (!e.relatedTarget || !this.contains(e.relatedTarget)) {
-                    this.querySelector('.language-name').nextElementSibling.style.display = 'none';
-                }
-            });
-        }
-    };
+        // If mouse still over description, it must be visible. So if mouse NOT over relatives, description hides
+        hoverAreas[i].addEventListener('mouseout', function(e) {
+            if (!e.relatedTarget || !this.contains(e.relatedTarget)) {
+                this.querySelector('.language-name').nextElementSibling.style.display = 'none';
+            }
+        });
+    }
 
 </script>
 
