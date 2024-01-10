@@ -31,7 +31,7 @@ class SearchController < ApplicationController
 
 
           # Imagine we have "b", "bash" and "cobol". We are searching for "b". What should be higher? Exactly
-        elsif entry['Name'] == term
+        elsif entry['Name'] == term && @terms.size == 1
           entry['Name'] == term ? 2 : 0
 
         else
