@@ -16,24 +16,26 @@
   <button type="submit" id="searchButton" >Search</button>
 </form>
 
-<% @results.each do |score, items| %>
-  <div style="font-size: 30px">
-    <h3>Results with score <%= score %>:</h3>
-    <p>Found <b><%= items.size %></b> item(s).</p>
-  </div>
-  <% items.each do |item| %>
-    <li style="font-size: 25px; margin: 25px">
-      <div class="hover-area">
-      <span class="language-name"> Language name: <%= item[:entry]["Name"].titleize %></span>
-      <div class="language-details" style="display: none;">
-        Language type(s): <%= item[:entry]["Type"].titleize %>
-        <br>
-        Language creator(s): <%= item[:entry]["Designed by"].titleize %>
-      </div>
-      <hr>
-      </div>
-    </li>
-
+  <% max_score = @results.keys.max %>
+  <% @results.each do |score, items| %>
+    <% if score == max_score %>
+    <div style="font-size: 30px">
+      <h3>Results with score <%= score %>:</h3>
+      <p>Found <b><%= items.size %></b> item(s).</p>
+    </div>
+    <% items.each do |item| %>
+      <li style="font-size: 25px; margin: 25px">
+        <div class="hover-area">
+        <span class="language-name"> Language name: <%= item[:entry]["Name"].titleize %></span>
+        <div class="language-details" style="display: none;">
+          Language type(s): <%= item[:entry]["Type"].titleize %>
+          <br>
+          Language creator(s): <%= item[:entry]["Designed by"].titleize %>
+        </div>
+        <hr>
+        </div>
+      </li>
+    <% end %>
   <% end %>
 <% end %>
 
